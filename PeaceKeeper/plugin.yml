@@ -3,8 +3,7 @@ main: com.incapable.peacekeeper.Main
 version: 1.2.3
 description: Custom chat monitoring and spam protection
 website: http://infinitasoftware.nl
-authors:
-    - Incapable
+authors: [incapable1337]
 commands:
   pk:
     description: Shows all PeaceKeeper Commands
