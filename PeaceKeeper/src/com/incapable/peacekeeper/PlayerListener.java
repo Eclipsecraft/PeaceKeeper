@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -41,7 +41,7 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(PlayerChatEvent event) {
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = storage.getPlayer(event.getPlayer().getName());
 
 		if (messageAllowed(event, player)) {
@@ -56,7 +56,7 @@ public class PlayerListener implements Listener {
 		player.AddMessageCount();
 	}
 
-	private boolean messageAllowed(PlayerChatEvent event, Player player) {
+	private boolean messageAllowed(AsyncPlayerChatEvent event, Player player) {
 		if (!Bukkit.getPlayer(player.GetName()).hasPermission(
 				"peacekeeper.exempt")) {
 			if (player.CanTalk()) {
@@ -95,7 +95,7 @@ public class PlayerListener implements Listener {
 		return true;
 	}
 	
-	private Boolean FilterMessage(PlayerChatEvent event, Player player) {
+	private Boolean FilterMessage(AsyncPlayerChatEvent event, Player player) {
 		if (config.filterEnabled) {
 			for (String filteredWord : config.FilterList) {
 				if (event.getMessage().toLowerCase().contains(filteredWord)) {
@@ -118,7 +118,7 @@ public class PlayerListener implements Listener {
 		return false;
 	}
 
-	private Boolean CheckCaps(PlayerChatEvent event, Player player) {
+	private Boolean CheckCaps(AsyncPlayerChatEvent event, Player player) {
 		if ((config.enableCapsBlocking)
 				&& (event.getMessage().length() > config.startCounting)) {
 			float caps = 0;
@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
 		return false;
 	}
 	
-	private Boolean CheckFlood(PlayerChatEvent event, Player player) {
+	private Boolean CheckFlood(AsyncPlayerChatEvent event, Player player) {
 		if (config.enableFloodBlocking) {
 			if (System.currentTimeMillis() - player.GetLastFlood() >= 600000)
 				player.ResetFloodWarnings();
@@ -184,7 +184,7 @@ public class PlayerListener implements Listener {
 		return false;
 	}
 	
-	private boolean CheckFloodPatern(PlayerChatEvent event, Player player)
+	private boolean CheckFloodPatern(AsyncPlayerChatEvent event, Player player)
 	{
 		if (config.enableFloodPatternBlocking) {
 			if (System.currentTimeMillis() - player.GetLastFlood() >= 600000)
@@ -237,7 +237,7 @@ public class PlayerListener implements Listener {
 		return false;
 	}
 	
-	private boolean CheckRepeats(PlayerChatEvent event, Player player){
+	private boolean CheckRepeats(AsyncPlayerChatEvent event, Player player){
 		if (event.getMessage().equals(player.GetLastMessage())) {
 			player.AddRepeats();
 			if (player.GetRepeats() > config.allowedRepeats) {
