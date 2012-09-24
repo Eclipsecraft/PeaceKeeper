@@ -20,15 +20,20 @@ public class BanHandler {
 	}
 
 	public void kick(Player player, String reason) {
-		if (player.GetKickWarnings() >= config.kicksBeforeBan && config.enableBan) {
+		if (player.GetKickWarnings() >= config.kicksBeforeBan && config.enableTempBan) {
 			int banMinutes = config.tempBanStartMinutes;
 			int multiplier = (player.GetTempBans() * config.tempBanScale);
 			
-			if(player.GetTempBans() < config.tempBanMaxStep)
+			if(player.GetTempBans() <= config.tempBanMaxStep)
 				player.AddTempBan();
 			
-			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+			if(player.GetTempBans() > config.tempBanMaxStep && config.enableBan)
+				ban(player);
+			else
+			{			
+				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
 					"tempban " + player.GetName() + " " + (banMinutes * multiplier) + " minutes spamming");
+			}
 		} else {
 			Bukkit.getPlayer(player.GetName()).kickPlayer(
 					"PeaceKeeper: " + reason);
@@ -61,21 +66,22 @@ public class BanHandler {
 	}
 
 	public void floodKick(Player player) {
-		if (player.GetKickWarnings() >= config.kicksBeforeBan && config.enableBan) {
+		if (player.GetKickWarnings() >= config.kicksBeforeBan && config.enableTempBan) {
 			int banMinutes = config.tempBanStartMinutes;
 			int multiplier = (player.GetTempBans() * config.tempBanScale);
 			
-			if(player.GetTempBans() < config.tempBanMaxStep)
-				player.AddTempBan();
-			
-			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+			if(player.GetTempBans() <= config.tempBanMaxStep)
+				player.AddTempBan();			
+			if(player.GetTempBans() > config.tempBanMaxStep && config.enableBan)
+				ban(player);
+			else
+			{			
+				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
 					"tempban " + player.GetName() + " " + (banMinutes * multiplier) + " minutes FlooooOOOooodiiiiIIIiiiing");
+			}
 		} else {
 			Bukkit.getPlayer(player.GetName()).kickPlayer(
 					"PeaceKeeper: FlooooOOOooodiiiiIIIiiiing");
-			//sendToPlayersWithPermission(ChatColor.RED + "[PeaceKeeper]: "
-			//		+ ChatColor.BLUE + player.GetName()
-			//		+ " was kicked for spamming!");
 			player.AddFloodKickWarning();
 			player.ResetWarnings();
 			player.ResetMessageCount();

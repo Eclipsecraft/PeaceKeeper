@@ -42,6 +42,7 @@ public class Config {
 	public int tempBanScale;
 	public int tempBanMaxStep;
 	public int tempBanStartMinutes;
+	public boolean enableTempBan;
 	public BanHandler banHandler;
 
 	public Config() {
@@ -83,6 +84,7 @@ public class Config {
 		this.tempBanScale = GetInt(main, "tempBanScale", 3);
 		this.tempBanMaxStep = GetInt(main, "tempBanScale", 10);
 		this.tempBanStartMinutes = GetInt(main, "tempBanStartMinutes", 10);
+		this.enableTempBan = GetBoolean(main, "enableTempBan", false);
 		main.saveConfig();
 	}
 	
@@ -109,9 +111,10 @@ public class Config {
 		sender.sendMessage("coolDownKickingEnabled - kick on message cooldown: " + this.coolDownKickingEnabled);
 		sender.sendMessage("kickExpireTime - the time in seconds before the kick counter gets reset: " + this.kickExpireTime);
 		sender.sendMessage("filterEnabled - enables/disables filtering on bad words: " + this.filterEnabled);
-		//sender.sendMessage("tempBanScale: " + this.tempBanScale);
-		//sender.sendMessage("tempBanMaxStep: " + this.filterEnabled);
-		//sender.sendMessage("tempBanStartMinutes: " + this.tempBanStartMinutes);
+		sender.sendMessage("tempBanScale - the multiplier on the minutes of a tempban: " + this.tempBanScale);
+		sender.sendMessage("tempBanMaxStep - The maximum amount of tempbans to use in the tempban scale: " + this.filterEnabled);
+		sender.sendMessage("tempBanStartMinutes - the minimum amount of minutes for a tempban: " + this.tempBanStartMinutes);
+		sender.sendMessage("enableTempBan - Enables tempbanning: " + this.enableTempBan);
 	}
 	
 	private boolean GetBoolean(Main main, String param, boolean defaultVal) {
